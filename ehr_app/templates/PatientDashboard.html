@@ -1,0 +1,128 @@
+<!-- Patient Dashboard page. Displays the graph of the details passed to it. If not displays appropriate message -->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, intial-scale=1.0">
+	<title>Patient Dashboard</title>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"></style>
+	<script type="text/javascript" src="http://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+	
+
+    <!-- CSS only Bootstrap v5.2.1 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+	<style>
+		body{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw;
+			margin: 0px;
+			font-family: Georgia, serif;
+		}
+	</style>
+	
+</head>
+
+<body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+	<section class="w-100 vh-100"> <!--style="background-color: #508bfc;">-->
+		<!--<nav class="navbar navbar-expand-xl bg-light" style="border-bottom: 1px solid #555;">-->
+		<nav class="navbar navbar-expand-xl bg-light" style="box-shadow: 5px 5px 5px 5px rgb(174, 172, 172);">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">EHR Manager</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						{% if Patient %}
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="{% url 'docPatientHome' %}">Home</a>
+							</li>
+						{% else %}
+							{% if Doctor %}
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="{% url 'docProfile' %}">Home</a>
+								</li>
+							{% else %}
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="{% url 'pHome' %}">Home</a>
+								</li>
+							{% endif %}
+						{% endif %}
+						
+					</ul>
+					<ul class="nav justify-content-end">
+						<a class="btn btn-primary" href="{% url 'log' %}" role="button">Log out</a>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<br>
+		<br>
+
+		{% if plot_check %}
+			<h3 style="text-align: center;">No Documents added</h3>
+		{% else %}
+			<h3 style="text-align: center;">Charts</h3>
+			{% autoescape off %}
+            	{{ plot_div }}
+        	{% endautoescape %}	
+			<hr>
+			<h3 style="text-align: center;">Reports</h3>
+			<div class="container py-5 h-50" style="padding: 0px;">
+				<div class = "table-responsive text-nowrap" style="text-align: center;">
+					<table id="myTable" class="table table-sm table-hover caption-top border cell-border stripe" style="text-align:center ;">
+						<thead>
+							<tr class="border cell-border">
+								<th width="10%" class="th-lg cell-border" scope="col" style="text-align:center;vertical-align: middle;">Date</th>
+								<th width="60%" class="th-lg cell-border" scope="col" style="text-align:center;vertical-align: middle;">Report Name</th>
+								<th width="20%" class="th-lg cell-border" scope="col" style="text-align:center;vertical-align: middle;">Report</th>
+							</tr>
+						</thead>
+						<tbody class="table-group-divider" style="overflow-y: auto;">
+							{% for report in report_list %}
+							<tr>
+								<form action="/downloadReport/" method="post">
+								{% csrf_token %}
+									<td style="vertical-align:middle">{{report.0}}</td>
+									<td style="vertical-align:middle">{{report.1}}</td>
+									<input type = "hidden" value = {{report.2}} name = "reportPath"></input>
+									<td style="vertical-align:middle"><input type="submit" value = "Download Report"></input></td>
+								</form>  
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{% endif %}
+
+	</section>
+
+</body>
+
+<script>
+	$(document).ready(function(){
+		$('#myTable').dataTable({
+        	scrollCollapse: false,
+        	paging: true,
+		});
+	});
+</script>
+
+</html>
+
+
+

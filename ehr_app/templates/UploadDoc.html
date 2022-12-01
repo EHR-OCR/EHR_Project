@@ -1,0 +1,182 @@
+<!--HTML file to display the upload document page which takes in information from the user -->
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, intial-scale=1.0">
+	<title>Patient Home</title>
+    <!-- CSS only Bootstrap v5.2.1 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+	<style>
+		body{
+			height: 100vh;
+			width: 100vw;
+			margin: 0px;
+			font-family: Georgia, serif;
+			background-color: #508bfc;
+		}
+	</style>
+</head>
+
+<body style="background-image: url('{%static '/images/bg_img.png'%}'); background-size:1300px 620px ">
+
+	{% if message %}
+	<script>
+		alert('{{ message }}');
+	</script>
+	{% endif %}
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+	<nav class="navbar navbar-expand-xl bg-light" style = "box-shadow: 5px 5px 5px 4.5px #1459da;">
+		<div class="container-fluid">
+			<a class="navbar-brand" style = "font-weight: 400;" href="#">EHR Manager</a>
+		  	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+		  	</button>
+		  	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			  		<li class="nav-item">
+						<a class="nav-link active" style="font-weight: 250; font-size: 400;" aria-current="page" href="{% url 'pHome' %}">Home</a>
+			  		</li>
+				</ul>
+				
+				<ul class="nav justify-content-end">
+					<a class="btn btn-primary" href="{% url 'log' %}" role="button">Log out</a>
+				</ul>
+		  	</div>
+		</div>
+	</nav> 
+    <div class = "position-relative" style=" margin-left: 0px ;margin-right: 0px; margin-top: 22px; color: rgb(255, 255, 255);">
+        <div class="position-absolute top-0 start-50 translate-middle-x" style="font-size: 680; font-weight: 250; ">Upload Documents</div> 
+    </div>
+    <div class="container py-5 h-50">
+        <div class="row justify-content-center align-items-start h-100">
+            <form action="/uploadDoc/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="report">Upload Report (pdf format) : </label>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                        <button class="btn btn-secondary btn-block" style="min-width: 160px; max-width: 160px;" type="submit">Auto Fill</button>
+                    </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-outline">
+                            <input required type="file" accept="application/pdf" placeholder="Upload here" style="font-size: 16px;" id="report" class="form-control form-control-md" name = "myfile"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="rbcCount">RBC Count : </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="input-group form-outline">
+                            {% if RBC %}
+                                <input type="number" step="0.001" value = "{{ RBC }}" placeholder="Enter the value" style="font-size: 16px;" id="rbcCount" class="form-control form-control-md" name = "rbcCount"/>
+                            {% else %}
+                                <input type="number" step="0.001" placeholder="Enter the value" style="font-size: 16px;" id="rbcCount" class="form-control form-control-md" name = "rbcCount"/>
+                            {% endif %}
+                            
+                            <span class="input-group-text">million/cu.mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="wbcCount">WBC Count : </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="input-group form-outline">
+                            
+                            {% if WBC %}
+                                <input type="number" step="0.001" value = "{{ WBC }}" placeholder="Enter the value" style="font-size: 16px;" id="wbcCount" class="form-control form-control-md" name = "wbcCount"/>
+                            {% else %}
+                                <input type="number" step="0.001" placeholder="Enter the value" style="font-size: 16px;" id="wbcCount" class="form-control form-control-md" name = "wbcCount"/>
+                            {% endif %}
+                            <span class="input-group-text">/cu.mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="pltCount">Platelet Count : </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class=" input-group form-outline">
+
+                            {% if Platelet %}
+                                <input type="number" step="0.001" value = "{{ Platelet }}" placeholder="Enter the value" style="font-size: 16px;" id="pltCount" class="form-control form-control-md" name = "pltCount"/>
+                            {% else %}
+                                <input type="number" step="0.001" placeholder="Enter the value" style="font-size: 16px;" id="pltCount" class="form-control form-control-md" name = "pltCount"/>
+                            {% endif %}
+                            <span class="input-group-text">/cu.mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="haemo">Haemoglobin Count : </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="input-group form-outline">
+
+
+                            {% if Haemoglobin %}
+                                <input type="number" step="0.001" value = "{{ Haemoglobin }}" placeholder="Enter the value" style="font-size: 16px;" id="haemo" class="form-control form-control-md" name = "haemo"/>
+                            {% else %}
+                                <input type="number" step="0.001" placeholder="Enter the value" style="font-size: 16px;" id="haemo" class="form-control form-control-md" name = "haemo"/>
+                            {% endif %}
+                            <span class="input-group-text">g/dl</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="form-outline">
+                             <label class="form-label" for="Reportdate" id="Reportdate">Dated: </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="input-group form-outline">
+
+                            {% if date %}
+                                <input type="date" placeholder="Test Report date" value="{{ date }}" style="font-size: 16px;" id="Reportdate" class="form-control form-control-md" name = "Reportdate"/>
+                            {% else %}
+                                <input type="date" placeholder="Test Report date" style="font-size: 16px;" id="Reportdate" class="form-control form-control-md" name = "Reportdate"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <button class="btn btn-secondary btn-block" style="min-width: 160px; max-width: 160px;" type="submit">Submit</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    <br>
+</body>
+</html>
+

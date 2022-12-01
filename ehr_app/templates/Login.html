@@ -1,0 +1,78 @@
+{% if message %}
+<script>
+	alert('{{ message }}');
+</script>
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, intial-scale=1.0">
+	<title>Sign In</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<style>
+		body{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw;
+			margin: 0px;
+		}
+	</style>
+</head>
+
+<body>
+	<section class="w-100 vh-100" style="background-color: #508bfc;">
+		<div class="container py-5 h-100">
+		 	<form action="/postsignIn/" method="post">
+		 	{% csrf_token %}
+		  	<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+			  <div class="card shadow-2-strong" style="border-radius: 1rem;">
+				<div class="card-body p-5 text-center">
+	  
+				  <h3 class="mb-5">Sign in</h3>
+	  
+				  <div class="form-outline mb-4">
+					<label class="form-label" for="email" style="margin-left: -290px;">Email</label>
+					<input type="text" placeholder="Enter your email address" style="font-size: 16px;" id="email" class="form-control form-control-lg" name = "email">
+					<br>
+					<label class="form-label" for="pass" style="margin-left: -260px;">Password</label>
+					<input type="password" placeholder="Enter your Password" style="font-size: 16px;" id="pass" class="form-control form-control-lg" name = "pass"/>
+				  </div>
+				  <!-- REMEMBER ME BOX----
+				  <div class="form-check d-flex justify-content-start mb-4">
+					<input class="form-check-input" type="checkbox" value="" id="form1Example3" />
+					<label class="form-check-label" for="form1Example3"> Remember password </label>
+				  </div>-->
+	  
+				  <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+				  <br>
+				  <p style="font-size: 16px;">Want to Create a New Account? <a href="{% url 'signup' %}">Sign Up</a></p>
+				  <!--<a href="{% url 'signup' %}" class="badge badge-secondary py-1 w-100">Want to Create A New Account?</a>-->
+	  
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</form>
+		</div>
+	</section>
+</body>
+</html>
+
+
+<!-- <form action="/postsignIn/" method="post">
+	<div class="mb-5">
+		<h3 class="mb-3">Login</h3>
+		<label class="mb-5-label" for="email">Email</label>
+		<input type="text" placeholder="name@email.com" id="email" class="form-control mb-3">
+		<label class="mb-5-label" for="pass">Password</label>
+		<input type="text" placeholder="Enter your Password" id="pass" class="form-control mb-3">
+		<button type="text" id="sub_btn" class="btn btn-outline-primary mb-3 w-100">Sign In</button>
+		<a href="{% url 'signup' %}" class="badge badge-secondary py-1 w-100">Want to Create A New Account?</a>
+	</div>
+</form> -->
